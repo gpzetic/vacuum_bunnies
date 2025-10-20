@@ -56,26 +56,41 @@ class _RegisterState extends State<Register> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                hintText:'Email',
-                placeholder: const Text('Enter your email'),
+              FormField(
+                key: _emailKey,
+                label: const Text('Email'),
+                hint: const Text('Enter your email'),
+                validator: const LengthValidator(min: 4),
+                child: const TextField(),
               ),
               const SizedBox(height: 16),
-              TextField(
-                hintText:'Password',
-                placeholder: const Text('Enter your password'),
+              FormField(
+                key: _passwordKey,
+                label: const Text('Password'),
+                validator: const LengthValidator(min: 8),
+                child: const TextField(
+                  obscureText: true,
+                ),
               ),
               const SizedBox(height: 16),
-              TextField(
-                hintText:'Confirm Password',
-                placeholder: const Text('Enter your password'),
+              FormField(
+                key: _confirmPasswordKey,
+                label: const Text('Confirm Password'),
+                validator: const LengthValidator(min: 8),
+                child: const TextField(
+                  obscureText: true,
+                ),
               ),
               const SizedBox(height: 16),
               Text(_message),
-              Button(
-                child: _waiting ? SizedBox(width: 30, child: CircularProgressIndicator(backgroundColor: Theme.of(context).colorScheme.secondary,)) : const Text('Register'),
-                style: ButtonStyle(variance: ButtonVariance.secondary),
-              ),
+              FormErrorBuilder(
+                builder: (context, errors, child) {
+                  return PrimaryButton(
+                    onPressed: errors.isEmpty ? () => context.submitForm() : null,
+                    child: _waiting ? SizedBox(width: 30, child: CircularProgressIndicator(backgroundColor: Theme.of(context).colorScheme.secondary,)) : const Text('Register'),
+                  );
+                },
+              )
             ],
           ),
         ),
